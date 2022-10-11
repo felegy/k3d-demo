@@ -1,0 +1,33 @@
+version: '3.5'
+
+services:
+
+  dev:
+    environment:
+      GITHUB_USER: ${GITHUB_USER-hvg-dev}
+      DOCKER_SOCKET: /var/run/docker.sock
+      DOCKER_GROUP: docker
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    build:
+      args:
+        VARIANT: bullseye
+        KUBE_CTL_VERSION: v1.25.2
+        K9S_VERSION: v0.26.6
+      context: ./.devcontainer
+      dockerfile: Dockerfile
+    volumes:
+      - .kube/config:/home/vscode/.kube/config
+      - .:/workspace:cached
+    command:
+    - /bin/sh
+    - -c
+    - 'while sleep 1000; do :; done'
+
+networks:
+  default:
+    name: k3d
+    external: true
+
