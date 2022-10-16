@@ -10,7 +10,7 @@ kubectl apply -f https://bit.ly/k4k8s
 
 ## Create test service (nginx)
 
-For testing now creating an nginx deployment and service to `default` namespace:
+For testing create an nginx deployment and service to `default` namespace:
 
 ```
 kubectl create deployment nginx --image=nginx
@@ -20,7 +20,7 @@ kubectl create service clusterip nginx --tcp=80:80
 
 ## Expose test service
 
-For local access of nginx service creating ingress expose (via Kong):
+For local access of nginx service create an ingress expose (via Kong):
 
 ```yaml
 # kong/nginx-ingress.yaml
@@ -42,7 +42,7 @@ spec:
             port:
               number: 80
 ```
-And deploy thath:
+And deploy that:
 
 ```
 kubectl apply -f kong/nginx-ingress.yaml
@@ -50,7 +50,7 @@ kubectl apply -f kong/nginx-ingress.yaml
 
 ## Testing
 
-Finding the external IP address of the `kong` service (via MetalLB):
+Find the external IP address of the `kong` service (via MetalLB):
 
 ```
 $ kubectl get services --namespace kong
@@ -62,7 +62,7 @@ kong-validation-webhook   ClusterIP      10.43.101.103   <none>        443/TCP  
 
 ## Testing kong access
 
-According to the above, kong is probably accesible at `172.28.0.1` via ports `80` and `443`:
+According to the above, kong is probably accesible at `172.28.0.1` on ports `80` and `443`:
 
 **Kong over HTTP**
 
@@ -111,8 +111,4 @@ Via: kong/3.0.0
 🎉 Awesome ✔️
 
 DONE
-The `kong` ingress controller working properly.
-
-
-
-
+The `kong` ingress controller works properly.
