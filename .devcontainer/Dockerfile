@@ -70,5 +70,7 @@ Host gist.github.com \n\
   Hostname ssh.github.com \n\
   Port 443 \n\
   User git \n\
-'>  $HOME/.ssh/config
+'>  $HOME/.ssh/config; \
+echo 'source <(kubectl completion bash)' >> ~/.bashrc; \
+echo 'source <(kubectl completion zsh)' >> ~/.zshrc;
 USER root
