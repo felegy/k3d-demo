@@ -1,5 +1,50 @@
 version: "3.5"
 
+services:
+
+  postgres:
+    image: bitnami/pgbouncer:1-debian-11
+    secrets:
+      - KONG_DB_PW
+    environment:
+      POSTGRESQL_HOST: db
+      POSTGRESQL_PORT: 5432
+      POSTGRESQL_DATABASE: kong
+      POSTGRESQL_USERNAME: kong
+      POSTGRESQL_PASSWORD_FILE: /run/secrets/KONG_DB_PW
+      PGBOUNCER_BIND_ADDRESS: 0.0.0.0
+      PGBOUNCER_PORT: 5432
+
+  db:
+    image: bitnami/postgresql:14-debian-11
+    restart: always
+    secrets:
+      - POSTGRESQL_PASSWORD
+      - K3D_DB_PW
+      - KONG_DB_PW
+      - HARBOR_DB_PW
+    environment:
+      POSTGRESQL_DATABASE: postgres
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_PASSWORD_FILE: /run/secrets/POSTGRESQL_PASSWORD
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgresql_data:/bitnami/postgresql
+      - ./.pg/create_databases.sh:/docker-entrypoint-initdb.d/create_databases.sh
+volumes:
+  postgresql_data:
+
+secrets:
+  POSTGRESQL_PASSWORD:
+    file: ./.pg/root_passwd.secret
+  K3D_DB_PW:
+    file: ./.pg/k3d_passwd.secret
+  KONG_DB_PW:
+    file: ./.pg/kong_passwd.secret
+  HARBOR_DB_PW:
+    file: ./.pg/harbor_passwd.secret
+
 networks:
   default:
     name: k3d
