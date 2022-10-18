@@ -22,6 +22,8 @@ apt-get update; \
     apt-utils \
     software-properties-common \
     build-essential \
+    bash-completion \
+    binutils \
     tmux \
     jq \
     git \
@@ -47,6 +49,8 @@ chmod a+x /tmp/kubectl; \
 mv /tmp/kubectl /usr/local/bin; \
 (cd /tmp; tar zxf k9s_*.tar.gz; mv k9s /usr/local/bin); \
 curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash; \
+curl -fsSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64; \
+chmod +x /usr/local/bin/argocd; \
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -; \
 add-apt-repository "deb https://download.docker.com/linux/debian/ ${VARIANT} stable"; \
 apt-get update -qq; \
@@ -72,5 +76,7 @@ Host gist.github.com \n\
   User git \n\
 '>  $HOME/.ssh/config; \
 echo 'source <(kubectl completion bash)' >> ~/.bashrc; \
-echo 'source <(kubectl completion zsh)' >> ~/.zshrc;
+echo 'source <(kubectl completion zsh)' >> ~/.zshrc; \
+echo 'source <(helm completion bash)' >> ~/.bashrc; \
+echo 'source <(helm completion zsh)' >> ~/.zshrc;
 USER root
