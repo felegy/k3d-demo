@@ -1,2 +1,4 @@
 .kube/*
 !.kube/.gitkeep
+.pg/*
+!.pg/create_databases.sh
