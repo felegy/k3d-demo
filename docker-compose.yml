@@ -1,9 +1,44 @@
 version: "3.5"
 
 services:
+  nginx:
+    image: "nginx:mainline"
+    ports:
+      - 6443:6443
+    restart: on-failure
+    volumes:
+      - .nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      default:
+        ipv4_address: 172.28.5.100
+
+  # konga:
+  #   image: pantsel/konga:latest
+  #   ports:
+  #     - 1337:1337
+  #   environment:
+  #     NODE_TLS_REJECT_UNAUTHORIZED: 0
+
+  kong-migrations-up:
+    image: kong/kong-gateway:3.0
+    command: kong migrations bootstrap
+    #command: kong migrations up
+    environment:
+      KONG_PG_HOST: db
+      KONG_DATABASE: postgres
+      KONG_PG_DATABASE: kong
+      KONG_PG_PASSWORD: kong
+      KONG_PG_USER: kong
+      KONG_PG_PORT: 5432
+    restart: on-failure
+    networks:
+      default:
+        ipv4_address: 172.28.5.254
 
   postgres:
     image: bitnami/pgbouncer:1-debian-11
+    ports:
+      - 6432:6432
     secrets:
       - KONG_DB_PW
     environment:
@@ -13,10 +48,15 @@ services:
       POSTGRESQL_USERNAME: kong
       POSTGRESQL_PASSWORD_FILE: /run/secrets/KONG_DB_PW
       PGBOUNCER_BIND_ADDRESS: 0.0.0.0
-      PGBOUNCER_PORT: 5432
+      PGBOUNCER_PORT: 6432
+    networks:
+      default:
+        ipv4_address: 172.28.5.251
 
   db:
     image: bitnami/postgresql:14-debian-11
+    ports:
+      - 5432:5432
     restart: always
     secrets:
       - POSTGRESQL_PASSWORD
@@ -27,11 +67,13 @@ services:
       POSTGRESQL_DATABASE: postgres
       POSTGRESQL_USERNAME: postgres
       POSTGRESQL_PASSWORD_FILE: /run/secrets/POSTGRESQL_PASSWORD
-    ports:
-      - '5432:5432'
     volumes:
       - postgresql_data:/bitnami/postgresql
       - ./.pg/create_databases.sh:/docker-entrypoint-initdb.d/create_databases.sh
+    networks:
+      default:
+        ipv4_address: 172.28.5.250
+
 volumes:
   postgresql_data:
 
