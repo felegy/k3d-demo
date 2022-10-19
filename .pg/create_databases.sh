@@ -1,5 +1,8 @@
  #!/usr/bin/env bash
 
+# fail hard
+set -o pipefail
+
 export K3D_DB=${K3D_DB-k3d}
 export KONG_DB=${KONG_DB-kong}
 export HARBOR_DB=${HARBOR_DB-harbor}

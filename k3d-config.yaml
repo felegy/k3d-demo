@@ -4,15 +4,11 @@ kind: Simple # internally, we also have a Cluster config, which is not yet avail
 #  name: default # name that you want to give to your cluster (will still be prefixed with `k3d-`)
 servers: 2 # same as `--servers 1`
 agents: 3 # same as `--agents 2`
-kubeAPI: # same as `--api-port myhost.my.domain:6445` (where the name would resolve to 127.0.0.1)
-  host: "localhost" # important for the `server` setting in the kubeconfig
-  hostIP: "192.168.10.165" # where the Kubernetes API will be listening on
-  hostPort: "6443" # where the Kubernetes API listening port will be mapped to on your host system
 #image: rancher/k3s:v1.20.4-k3s1 # same as `--image rancher/k3s:v1.20.4-k3s1`
 network: k3d # same as `--network my-custom-net`
 token: superSecretToken # same as `--token superSecretToken`
 env:
-  - envVar: K3S_DATASTORE_ENDPOINT=postgres://k3d:k3d@192.168.10.165:5432/k3d?sslmode=disable
+  - envVar: K3S_DATASTORE_ENDPOINT=postgres://k3d:k3d@172.28.5.250:5432/k3d?sslmode=disable
     nodeFilters:
       - server:*
 options:
@@ -30,9 +26,9 @@ options:
       - arg: --disable=traefik
         nodeFilters:
           - server:*
-      #- arg: --datastore-endpoint="postgres://k3d:k3d@tcp(192.168.10.165:5432)/k3d"
-      #  nodeFilters:
-      #    - server:*
+      - arg: --node-taint=CriticalAddonsOnly=true:NoExecute
+        nodeFilters:
+          - server:*
   kubeconfig:
     updateDefaultKubeconfig: true # add new cluster to your default Kubeconfig; same as `--kubeconfig-update-default` (default: true)
     switchCurrentContext: true # also set current-context to the new cluster's context; same as `--kubeconfig-switch-context` (default: true)
