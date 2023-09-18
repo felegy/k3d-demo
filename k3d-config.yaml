@@ -1,14 +1,14 @@
-apiVersion: k3d.io/v1alpha4 # this will change in the future as we make everything more stable
+apiVersion: k3d.io/v1alpha5 # this will change in the future as we make everything more stable
 kind: Simple # internally, we also have a Cluster config, which is not yet available externally
 #metadata:
 #  name: default # name that you want to give to your cluster (will still be prefixed with `k3d-`)
-servers: 2 # same as `--servers 1`
+servers: 3 # same as `--servers 1`
 agents: 3 # same as `--agents 2`
-#image: rancher/k3s:v1.20.4-k3s1 # same as `--image rancher/k3s:v1.20.4-k3s1`
+image: cr.hvg.hu/hub/rancher/k3s:v1.25.12-k3s1 # same as `--image rancher/k3s:v1.20.4-k3s1`
 network: k3d # same as `--network my-custom-net`
 token: superSecretToken # same as `--token superSecretToken`
 env:
-  - envVar: K3S_DATASTORE_ENDPOINT=postgres://k3d:k3d@172.28.5.250:5432/k3d?sslmode=disable
+  - envVar: K3S_DATASTORE_ENDPOINT=postgres://k3d:k3d@172.28.255.254:5432/k3d?sslmode=disable
     nodeFilters:
       - server:*
 options:
@@ -20,6 +20,9 @@ options:
     disableRollback: false # same as `--no-Rollback`
   k3s: # options passed on to K3s itself
     extraArgs: # additional arguments passed to the `k3s server|agent` command; same as `--k3s-arg`
+      - arg: --tls-san=172.28.1.10
+        nodeFilters:
+          - server:*
       - arg: --disable=servicelb
         nodeFilters:
           - server:*

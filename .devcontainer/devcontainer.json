@@ -11,8 +11,6 @@
 		"docker-compose.yml"
 	],
 
-    "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
-
 	// The 'service' property is the name of the service for the container that VS Code should
 	// use. Update this value and .devcontainer/docker-compose.yml to the real service name.
 	"service": "dev",
@@ -27,7 +25,10 @@
             // Add the IDs of extensions you want installed when the container is created.
             "extensions": [
                 "EditorConfig.EditorConfig",
-                "ms-kubernetes-tools.vscode-kubernetes-tools"
+                "ms-kubernetes-tools.vscode-kubernetes-tools",
+                "ms-ossdata.vscode-postgresql",
+                "ckolkman.vscode-postgres",
+                "inercia.vscode-k3d"
             ]
         }
     },

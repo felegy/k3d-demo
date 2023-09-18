@@ -1,0 +1,6 @@
+mirrors:
+  docker.io:
+    endpoint:
+      - "https://cr.hvg.hu"
+    rewrite:
+      "^(.*)": "hub/$1"

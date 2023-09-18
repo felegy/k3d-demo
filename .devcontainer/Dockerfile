@@ -42,7 +42,7 @@ ADD requirements.txt /requirements.txt
 RUN pip3 install --upgrade -r /requirements.txt
 
 ADD "https://dl.k8s.io/release/${KUBE_CTL_VERSION}/bin/linux/amd64/kubectl" /tmp/
-ADD "https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_Linux_x86_64.tar.gz" /tmp
+ADD "https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_Linux_amd64.tar.gz" /tmp
 
 RUN \
 chmod a+x /tmp/kubectl; \

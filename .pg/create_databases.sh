@@ -20,6 +20,9 @@ export K3D_DB_PW=${K3D_DB_PW-k3d}
 export KONG_DB_PW=${KONG_DB_PW-kong}
 export HARBOR_DB_PW=${HARBOR_DB_PW-harbor}
 
+export PGUSERNAME=${POSTGRESQL_USERNAME-postgres}
+export PGPASSWORD=${POSTGRESQL_PASSWORD}
+
 info() {
 	# send all of our output to stderr
 	exec 1>&2
@@ -93,8 +96,11 @@ err_trap() {
 trap 'err_trap' ERR
 
 sql_exec() {
-    PGPASSWORD=${POSTGRESQL_PASSWORD}
-	psql -U ${POSTGRESQL_USERNAME} -c "$1"
+    if [ -z "$2" ]; then
+		psql -c "$1"
+	else
+		psql -c "$1" -d "$2"
+	fi
 }
 
 status "Create user '${K3D_DB}' and database."
