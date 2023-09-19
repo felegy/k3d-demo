@@ -1,6 +1,7 @@
 version: "3.5"
 
 services:
+
   db:
     image: cr.hvg.hu/hub/bitnami/postgresql:14-debian-11
     ports:
@@ -21,6 +22,21 @@ services:
     networks:
       default:
         ipv4_address: 172.28.255.254
+
+  gitea:
+    image: cr.hvg.hu/hub/gitea/gitea:1.20.4
+    container_name: gitea
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    restart: always
+    volumes:
+      - ./.gitea:/data
+    ports:
+      - "3000:3000"
+    networks:
+      default:
+        ipv4_address: 172.28.255.250
 
 volumes:
   postgresql_data:

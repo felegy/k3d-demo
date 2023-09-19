@@ -33,7 +33,8 @@ docker network create \
   --ip-range=172.28.1.0/24 \
   k3d
 ```
-**Seed secrets**
+
+**Generate secrets**
 
 ```bash
 echo "postgres" > ./.pg/root_passwd.secret
